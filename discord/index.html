@@ -1,37 +1,79 @@
-<!DOCTYPE HTML>
-<html lang="it">
-<head>
-    <!--Header - Light:-->
-    <meta charset="UTF-8">
-    <meta name="description" content="Il sito ufficiale di BisUmTo">
-    <meta name="keywords" content="multicore network, multicore, bisumto">
-    <meta name="author" content="LoreSchaeffer, BisUmTo">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#282828">
-    <base href="https://www.bisumto.it/">
-    <link rel="icon" href="/favicon.ico">
-    <!--:Header-->
+WordprocessingDocument document = WordprocessingDocument.Create(
+            @"C:\test PFE.docx",
+            WordprocessingDocumentType.Document
+        );
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146517603-1" defer></script>
-    <script defer>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'UA-146517603-1');
-    </script>   
 
-    <meta http-equiv="refresh" content="0; url=https://discord.gg/zgPxPYV">
-    <title>BisUmTo - Reindirizzamento in corso</title>
-    <script type="text/javascript" defer>
-        window.location.href = "https://discord.gg/zgPxPYV"
-    </script>    
-</head>
-<body>
-    Se non sei stato reindirizzato automaticamente,
-    procedi manualmente sul <a href='https://discord.gg/zgPxPYV'>sito di reindirizzamento</a>.
-    <br/>
-    Questo sito fa uso di cookie per migliorare l'esperienza di navigazione degli utenti, per presentare annunci pubblicitari personalizzati e per raccogliere informazioni sull'utilizzo del sito stesso. Usando il sito accetti questo utilizzo. Consulta l'<a href="../legal/cookie-policy.html">Informativa sui cookie</a>.
-</body>
-</html>
+        MainDocumentPart mainDocumentPart = document.AddMainDocumentPart();
+
+
+        mainDocumentPart.Document = new Document();
+        mainDocumentPart.Document.AddNamespaceDeclaration("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+        mainDocumentPart.Document.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
+        mainDocumentPart.Document.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+        mainDocumentPart.Document.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
+        mainDocumentPart.Document.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
+        mainDocumentPart.Document.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+        mainDocumentPart.Document.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
+        mainDocumentPart.Document.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+        mainDocumentPart.Document.AddNamespaceDeclaration("wne", "http://schemas.microsoft.com/office/word/2006/wordml");
+
+
+
+        Body documentBody = new Body();
+        mainDocumentPart.Document.Append(documentBody);
+
+
+        StyleDefinitionsPart styleDefinitionsPart =
+        mainDocumentPart.AddNewPart<StyleDefinitionsPart>();
+
+
+        FileStream stylesTemplate =
+            new FileStream("styles.xml", FileMode.Open, FileAccess.Read);
+        styleDefinitionsPart.FeedData(stylesTemplate);
+        styleDefinitionsPart.Styles.Save();
+
+
+
+        #region Titre du document
+
+
+        Paragraph titleParagraphe = new Paragraph() { RsidParagraphAddition = "00AF4948", RsidParagraphProperties = "00625634", RsidRunAdditionDefault = "00625634" }; ;
+
+        Run run = new Run();
+        RunProperties rpr = new RunProperties();
+        RunStyle rstylr = new RunStyle { Val = "style1" };
+        run.Append(rpr);
+        Text t = new Text("open");
+        run.Append(t);
+        titleParagraphe.Append(run);
+
+        run = new Run();
+        rpr = new RunProperties();
+        rstylr = new RunStyle { Val = "style2" };
+        run.Append(rpr);
+        t = new Text("packaging")
+        {
+            Space = new DocumentFormat.OpenXml.EnumValue<DocumentFormat.OpenXml.SpaceProcessingModeValues> { InnerText = "preserve" }
+        };
+        run.Append(t);
+        titleParagraphe.Append(run);
+
+        run = new Run();
+        rpr = new RunProperties();
+        rstylr = new RunStyle { Val = "style1" };
+        run.Append(rpr);
+        t = new Text("conventions")
+        {
+            Space = new DocumentFormat.OpenXml.EnumValue<DocumentFormat.OpenXml.SpaceProcessingModeValues> { InnerText = "preserve" }
+        };
+        run.Append(t);
+        titleParagraphe.Append(run);
+
+
+        documentBody.Append(titleParagraphe);
+
+
+        document.MainDocumentPart.Document.Save();
+        document.Dispose(); 
